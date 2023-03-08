@@ -1,0 +1,1 @@
+Welcome to the Node.js lec-2 now check new data is added or not 
