@@ -1,11 +1,11 @@
 //configuration of the server has done through the package.json file
 
-const http = require("http");
+const http = require("http");//http plugin
 //this is the port that every website has unique id by default it is 80
 const port = 8000;
 //to read index.html
 //reading and writing for the file
-const fs = require("fs");
+const fs = require("fs");//fs plugin for read/write file
 
 //loading is going on so to fix this issue
 //we need to deal with return handler
@@ -46,14 +46,15 @@ function requestHandler(req, res) {
 	});
 }
 
-//run our server ...created the server
+//create or make a server to run our code in server for development 
 const server = http.createServer(requestHandler);
 
 //now to know the server is active or not we check like this
+//listen function help in checking our server
 server.listen(port, function (err) {
 	if (err) {
 		console.log(err);
 		return;
 	}
-	console.log("Server is working in the write port ", port);
+	console.log("Server is working fine at port ", port);
 });
