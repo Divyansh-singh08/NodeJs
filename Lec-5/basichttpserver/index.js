@@ -7,8 +7,25 @@ const port = 8000;
 //reading and writing for the file
 const fs = require("fs");//fs plugin for read/write file
 
+
+//create or make a server to run our code in server for development 
+const server = http.createServer(requestHandler);
+
+//now to know the server is active or not we check like this
+//listen function help in checking our server
+server.listen(port, function (err) {
+	if (err) {
+		console.log(err);
+		return;
+	}
+	console.log("Server is working fine at port ", port);
+});
+
+
+
 //loading is going on so to fix this issue
 //we need to deal with return handler
+// request and response  
 function requestHandler(req, res) {
 	console.log(req.url);
 	//take or render the html to the server
@@ -45,16 +62,3 @@ function requestHandler(req, res) {
 		return res.end(data);//this will return to the requestHandler function to whom it call
 	});
 }
-
-//create or make a server to run our code in server for development 
-const server = http.createServer(requestHandler);
-
-//now to know the server is active or not we check like this
-//listen function help in checking our server
-server.listen(port, function (err) {
-	if (err) {
-		console.log(err);
-		return;
-	}
-	console.log("Server is working fine at port ", port);
-});
