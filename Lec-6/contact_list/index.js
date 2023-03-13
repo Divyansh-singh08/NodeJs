@@ -4,6 +4,13 @@ const express = require("express");
 const path = require("path"); //this is inbuilt in nodejs
 const port = 8000;
 
+//need to acquired the mongoose.js file
+//this code is importing the module mongoose and using it to
+//connect to the database
+const db = require("./config/mongoose");
+
+const Contact = require("./models/contact");
+
 //we need to fire express to get all the functionality of express we call express()
 const app = express(); //and all method were store in app
 
@@ -53,25 +60,72 @@ var contactList = [
 		phone: "1223435",
 	},
 ];
-
+//******************************************************************************* */
 // "/" is the router and function(req,res) is the controller
-app.get("/", function (req, res) {
-	//MW1 data
-	// console.log('to the get controller',req.myName);
+// app.get("/", function (req, res) {
+// 	//MW1 data
+// 	// console.log('to the get controller',req.myName);
 
-	// console.log(req);
-	// console.log(__dirname); //this will display the dir where where the server start
+// 	// console.log(req);
+// 	// console.log(__dirname); //this will display the dir where where the server start
 
-	// res.send(`<h1>It is running is it cool .. ?</h1>`);
+// 	// res.send(`<h1>It is running is it cool .. ?</h1>`);
 
-	// return res.render('home');
-	//want to make title of the page dynamic
-	// console.log(req);//return true as get
-	return res.render("home", {
-		title: "home",
-		contact_list: contactList,
-	});
-});
+// 	// return res.render('home');
+// 	//want to make title of the page dynamic
+// 	// console.log(req);//return true as get
+// 	return res.render("home", {
+// 		title: "home",
+// 		contact_list: contactList,
+// 	});
+// });
+
+//******************************************************************************************* */
+
+
+
+
+// app.get("/", async(req, res)=>{
+
+// 	try{
+
+// 		await Contact.find({},async(err,contacts)=>{
+// 			try{
+// 				return  await res.render('home',{
+// 					title:'Contacts List',
+// 					contact_list:contacts 
+// 				});
+	
+// 			}catch(err){
+// 				console.log(err,`Getting error 😣 😶‍🌫️..`);
+// 				return;
+// 			}
+// 		});
+
+// 	}catch(err){
+// 		console.log(err);
+// 	}
+
+// });
+//%%%%%%%%%%%%%%%%%%%%%%%%chatGPT%%%%%%%%%%%%%%%%%%%%%%%%
+app.get("/", async (req, res) => {
+	try {
+	  const contacts = await Contact.find({});
+	  return res.render("home", {
+		title: "Contac List",
+		contact_list: contacts,
+	  });
+	} catch (err) {
+	  console.log(err);
+	//   return res.status(500).send("Internal Server Error");
+	return;
+	}
+  });
+  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
 
 //create another controller for this
 app.get("/create-contact", function (req, res) {
@@ -83,22 +137,58 @@ app.get("/create-contact", function (req, res) {
 
 //form submit and click then data come here
 ///create-contact this must be pass to the in form action class
-app.post("/create-contact", (req, res) => {
-	//this help in redirect to practice page
-	// return res.redirect('/practise');
-	// console.log(req);//return true as post
-	// console.log(req.body);//we use this bcz we use encoded
-	// console.log(req.body.name);
-	// console.log(req.body.phone);
-	//need to append in the contactList:
-	// contactList.push({
-	// 	name:req.body.name,
-	// 	phone:req.body.phone
-	// });
+// app.post("/create-contact", (req, res) => {
+// 	//this help in redirect to practice page
+// 	// return res.redirect('/practise');
+// 	// console.log(req);//return true as post
+// 	// console.log(req.body);//we use this bcz we use encoded
+// 	// console.log(req.body.name);
+// 	// console.log(req.body.phone);
+// 	//need to append in the contactList:
+// 	// contactList.push({
+// 	// 	name:req.body.name,
+// 	// 	phone:req.body.phone
+// 	// });
 
-	contactList.push(req.body); //do same thing just code reduce
-	// return res.redirect('/');
-	return res.redirect("back");
+// 	contactList.push(req.body); //do same thing just code reduce
+// 	// return res.redirect('/');
+// 	return res.redirect("back");
+// });
+
+//now i don't need to push into the contactList bcz now i have database
+// app.post("/create-contact", (req, res) => {
+// 	//i need to push into the database
+// 	//from the browser through the ejs file form filled part
+// 	Contact.create(
+// 		{
+// 			name: req.body.name,
+// 			phone: req.body.phone
+// 		},function(err, newContact) {
+// 			if (err) {
+// 				console.log(err, "you get the error man!!..😪");
+// 				return;
+// 			}
+// 			console.log("**********", newContact);
+// 			return res.redirect("back");
+// 		}
+// 	);
+
+// // 	// return res.redirect('back');
+// });
+
+app.post("/create-contact", async (req, res) => {
+	try {
+		const name = req.body.name;
+		const phone = req.body.phone;
+		const newUser = await Contact.create({
+			name: name,
+			phone: phone,
+		});
+		console.log("**********", newUser);
+		return res.redirect("back");
+	} catch (error) {
+		console.log("error", error);
+	}
 });
 
 // //delete the contact list by params
