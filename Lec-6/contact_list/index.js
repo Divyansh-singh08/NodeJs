@@ -82,9 +82,6 @@ var contactList = [
 
 //******************************************************************************************* */
 
-
-
-
 // app.get("/", async(req, res)=>{
 
 // 	try{
@@ -93,9 +90,9 @@ var contactList = [
 // 			try{
 // 				return  await res.render('home',{
 // 					title:'Contacts List',
-// 					contact_list:contacts 
+// 					contact_list:contacts
 // 				});
-	
+
 // 			}catch(err){
 // 				console.log(err,`Getting error 😣 😶‍🌫️..`);
 // 				return;
@@ -110,22 +107,18 @@ var contactList = [
 //%%%%%%%%%%%%%%%%%%%%%%%%chatGPT%%%%%%%%%%%%%%%%%%%%%%%%
 app.get("/", async (req, res) => {
 	try {
-	  const contacts = await Contact.find({});
-	  return res.render("home", {
-		title: "Contac List",
-		contact_list: contacts,
-	  });
+		const contacts = await Contact.find({});
+		return res.render("home", {
+			title: "Contac List",
+			contact_list: contacts,
+		});
 	} catch (err) {
-	  console.log(err);
-	//   return res.status(500).send("Internal Server Error");
-	return;
+		console.log(err);
+		//   return res.status(500).send("Internal Server Error");
+		return;
 	}
-  });
-  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-
+});
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 //create another controller for this
 app.get("/create-contact", function (req, res) {
@@ -198,24 +191,64 @@ app.post("/create-contact", async (req, res) => {
 // 	let phone = req.params.phone;
 // });
 
-//delete the contact list by query
-app.get("/delete-button/", (req, res) => {
-	console.log(req.query.phone);
-	// console.log(req.query.name);
-	//get the query from the url
-	let phone = req.query.phone;
+// //delete the contact list by query
+// app.get("/delete-button/", (req, res) => {
+// 	console.log(req.query.phone);
+// 	// console.log(req.query.name);
+// 	//get the query from the url
+// 	let phone = req.query.phone;
 
-	//iterate over the list by using findIndex
-	let contactIndex = contactList.findIndex((contact) => contact.phone == phone);
+// 	//iterate over the list by using findIndex
+// 	let contactIndex = contactList.findIndex((contact) => contact.phone == phone);
 
-	//delete function is here
-	if (contactIndex != -1) {
-		contactList.splice(contactIndex, 1);
+// 	//delete function is here
+// 	if (contactIndex != -1) {
+// 		contactList.splice(contactIndex, 1);
+// 	}
+
+// 	// redirect at same page
+// 	return res.redirect("back");
+// });
+
+//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+//delete the data in the mongoDB
+app.get("/delete-button/", async (req, res) => {
+	try {
+		//get the id from the query and in the parameter id fetch form the home.ejs file
+		let id = req.query.id;
+
+		//this is used for deleting the data form the data base
+		let cont = await Contact.findByIdAndDelete(id);
+		console.log("Deleted item: ",cont);
+		return res.redirect("back");
+	} catch (err) {
+		console.log(err);
+		return;
 	}
-
-	// redirect at same page
-	return res.redirect("back");
 });
+
+//###########################################################################################
+//chatGPT
+// app.get("/delete-button/", async (req, res) => {
+// 	try {
+// 	  const id = req.query.id;
+// 	  console.log(id);
+// 	  const deletedContact = await Contact.findByIdAndDelete(id);
+// 	  console.log(deletedContact);
+// 	  if (!deletedContact) {
+// 		return res.status(404).send("Contact not found.");
+// 	  }
+  
+// 	//   req.flash("success", "Contact deleted successfully.");
+// 	  return res.redirect("back");
+// 	} catch (err) {
+// 	  console.log(err);
+// 	  return res.status(500).send("Internal Server Error");
+// 	}
+//   });
+
+
+
 
 //need to check is express function is working
 app.listen(port, (err) => {
