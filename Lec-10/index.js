@@ -8,4 +8,4 @@ const path = require("path");
 //imp parse
 // console.log(path.parse('E:/CODE Notes/Node js/Lec-10/index.js'));
 const name = path.parse('E:/CODE Notes/Node js/Lec-10/index.js');
-console.log(name.name);
+console.log(name);

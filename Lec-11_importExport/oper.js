@@ -16,9 +16,9 @@ const multi = (a,b)=>{
 // const name = 'Divyansh Singh'
 //export  the file path
 
-// module.exports = add;//export the file//now it is public
+// module.exports = add;//export the file//now it is public//single file can export
 // module.exports.name = name; 
-// module.exports = sub;//this is wrong
+// module.exports = sub;//this is wrong bcz multiple file can export like this
 
 //this type will help in returning in object {key : pair}
 // module.exports.add = add;
