@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 //JSON study
-
+//object
 const bioData = {
 	name: "Dm",
 	age: 34,
@@ -17,10 +17,11 @@ const jsonData = JSON.stringify(bioData);
 
 
 //now if we want to convert the json to the object file
-//then we use parse funtion
+//then we use parse function
 // const obData = JSON.parse(jsonData);
 // console.log(obData," object formate");
 
+//task
 //convert obj to JSON
 //add it into another file
 //readfile
